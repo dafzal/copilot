@@ -41,23 +41,15 @@ export default class DayBox extends React.Component {
 						<Table.Header>
 							<Table.Row>
 								<Table.HeaderCell>Time</Table.HeaderCell>
-								<Table.HeaderCell>
-									Safety Driver
-								</Table.HeaderCell>
-								<Table.HeaderCell>Vehicle</Table.HeaderCell>
-								<Table.HeaderCell>
-									Incident Type
-								</Table.HeaderCell>
+								<Table.HeaderCell>Driver</Table.HeaderCell>
 								<Table.HeaderCell>Incident ID</Table.HeaderCell>
 								<Table.HeaderCell>Status</Table.HeaderCell>
+								<Table.HeaderCell>Issue</Table.HeaderCell>
 							</Table.Row>
 						</Table.Header>
 
 						<Table.Body>
-							<Driver name="name1" number={3} />
-							<Driver name="name2" number={39} />
-							<Driver name="name2" number={36} />
-							<Driver name="name2" number={3} />
+							{this.props.data.map(row => <Driver data={row} />)}
 						</Table.Body>
 					</Table>
 				</div>

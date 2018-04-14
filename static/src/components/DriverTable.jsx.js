@@ -1,6 +1,23 @@
 import React from 'react'
-import DayBox from './DayBox.jsx.js'
-import { Segment, Header } from 'semantic-ui-react'
+import Driver from './Driver.jsx'
+import { Segment, Header, Table } from 'semantic-ui-react'
+
+const Styles = {
+	divider: {
+		height: 40,
+		backgroundColor: '#F6F6F6'
+	},
+	date: {
+		position: 'relative',
+		left: 40,
+		top: 10,
+		fontWeight: 'bold'
+	},
+	table: {
+		position: 'relative',
+		left: 40
+	}
+}
 
 export default class DriverTable extends React.Component {
 	constructor(props) {
@@ -10,9 +27,33 @@ export default class DriverTable extends React.Component {
 	render() {
 		return (
 			<div>
-				<DayBox date={'APRIL 14'} />
-				<DayBox date={'APRIL 15'} />
-				<DayBox date={'APRIL 16'} />
+				<div style={Styles.divider}>
+					<span style={Styles.date}> Drivers </span>
+				</div>
+				<div style={Styles.table}>
+					<Table
+						basic="very"
+						collapsing
+						singleLine
+						selectable
+						fixed
+						textAlign="left"
+					>
+						<Table.Header>
+							<Table.Row>
+								<Table.HeaderCell />
+								<Table.HeaderCell>Name</Table.HeaderCell>
+								<Table.HeaderCell>Driver ID</Table.HeaderCell>
+							</Table.Row>
+						</Table.Header>
+
+						<Table.Body>
+							{this.props.data.map(row => (
+								<Driver data={row} id={row.user_id} />
+							))}
+						</Table.Body>
+					</Table>
+				</div>
 			</div>
 		)
 	}

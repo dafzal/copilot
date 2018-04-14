@@ -1,41 +1,48 @@
 import React from 'react'
-import { Segment, Header, Image, Button } from 'semantic-ui-react'
+import { Segment, Header, Image, Message } from 'semantic-ui-react'
+import $ from 'jquery'
 
+var setHeight = function() {
+	let height = document.getElementByClassName('.banner').style.height
+	console.log(height)
+	return height / 2
+}
 const Styles = {
-	banner: {
+	header: {},
+	columns: {
 		position: 'absolute',
-		top: 10,
-		right: 10
-	},
-	title: {
-		color: 'white',
-		position: 'absolute',
+		top: 200,
 		left: 40,
-		top: 60,
-		textAlign: 'center'
-	},
-	incidents: {
+		fontSize: 28,
 		color: 'white',
-		position: 'relative',
-		left: 40,
-		top: 100,
-		fontSize: 50
-	},
-	drivers: {
-		color: 'white',
-		position: 'relative',
-		left: 140,
-		top: 100,
-		fontSize: 50
+		columns: 2
 	}
 }
-
 export default class HeadBanner extends React.Component {
+	constructor(props) {
+		super(props)
+		this.screenClick = this.screenClick.bind(this)
+	}
+
+	screenClick(e) {
+		this.props.changeScreen(e.target.id)
+	}
+
 	render() {
 		return (
 			<div>
-				<Image src="../static/dist/assets/Header.png" />
-				<Button style={Styles.banner}> Alerts </Button>
+				<img
+					style={Styles.header}
+					src="../static/dist/assets/Header.png"
+				/>
+				<div style={Styles.columns}>
+					<div onClick={this.screenClick} id="incident">
+						{this.props.incident} Incidents
+					</div>
+					<div onClick={this.screenClick} id="user">
+						{this.props.user} Users
+					</div>
+				</div>
 			</div>
 		)
 	}

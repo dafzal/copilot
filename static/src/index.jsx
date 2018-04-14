@@ -1,39 +1,75 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import $ from 'jquery'
 
 import TitleBar from './components/TitleBar.jsx'
 import HeadBanner from './components/Header.jsx'
 import DriverTable from './components/DriverTable.jsx'
+import IncidentTable from './components/IncidentTable.jsx'
 
 export default class App extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      ticker: 1,
-      columns: ['test1', 'test2', 'test3'],
-      users: [{ test1: 'field1' }]
+      incidents: [],
+      users: [],
+      screen: 'incident'
     }
     this.poll = this.poll.bind(this)
   }
 
   poll() {
     this.setState({ ticker: this.state.ticker + 1 })
-    // call API
+    $.ajax({
+      url: `/incidents`,
+      type: 'GET',
+      contentType: 'application/json',
+      success: data => {
+        this.setState({ incidents: data })
+      },
+      error: err => {
+        console.error(err)
+      }
+    })
+    $.ajax({
+      url: `/users`,
+      type: 'GET',
+      contentType: 'application/json',
+      success: data => {
+        this.setState({ users: data })
+      },
+      error: err => {
+        console.error(err)
+      }
+    })
   }
 
   componentDidMount() {
     // this.interval = setInterval(this.poll, 1000)
+    this.poll()
   }
 
   componentWillUnmountMount() {
     clearInterval(this.interval)
   }
 
+  changeScreen(screen) {
+    this.setState({ screen: screen })
+  }
+
   render() {
     return (
       <div>
-        <HeadBanner />
-        <DriverTable ticker={this.state.ticker} />>
+        <HeadBanner
+          incident={this.state.incidents.length}
+          user={this.state.users.length}
+          changeScreen={this.changeScreen.bind(this)}
+        />
+        {this.state.screen === 'incident' ? (
+          <IncidentTable data={this.state.incidents} />
+        ) : (
+          <DriverTable data={this.state.users} />
+        )}
       </div>
     )
   }

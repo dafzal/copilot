@@ -1,5 +1,14 @@
 import React from 'react'
-import { Segment, Header, Image, Table, Modal, Button } from 'semantic-ui-react'
+import { Card, Image, Table } from 'semantic-ui-react'
+
+const Styles = {
+	truncate: {
+		width: 200,
+		whiteSpace: 'nowrap',
+		overflow: 'hidden',
+		textOverflow: 'ellipsis'
+	}
+}
 
 export default class Driver extends React.Component {
 	constructor(props) {
@@ -7,43 +16,15 @@ export default class Driver extends React.Component {
 	}
 
 	render() {
+		let user = this.props.data
+
 		return (
 			<Table.Row>
-				<Table.Cell>06:14</Table.Cell>
 				<Table.Cell>
-					<Header as="h4" image>
-						<Image
-							src="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"
-							rounded
-							size="mini"
-						/>
-						<Header.Content>
-							{this.props.name}
-							<Header.Subheader>UserID</Header.Subheader>
-						</Header.Content>
-					</Header>
+					<Image floated="right" size="mini" src={user.img_url} />
 				</Table.Cell>
-				<Table.Cell>{this.props.number}</Table.Cell>
-				<Table.Cell>
-					<Modal trigger={<Button>See More</Button>}>
-						<Modal.Header>Select a Photo</Modal.Header>
-						<Modal.Content image>
-							<Image
-								wrapped
-								size="medium"
-								src="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"
-							/>
-							<Modal.Description>
-								<Header>Default Profile Image</Header>
-								<p>
-									We've found the following gravatar image
-									associated with your e-mail address.
-								</p>
-								<p>Is it okay to use this photo?</p>
-							</Modal.Description>
-						</Modal.Content>
-					</Modal>
-				</Table.Cell>
+				<Table.Cell>{user.name}</Table.Cell>
+				<Table.Cell>{user.user_id}</Table.Cell>
 			</Table.Row>
 		)
 	}
