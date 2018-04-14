@@ -109,9 +109,9 @@ def alert(head_positions):
             miss += 1
     return hit > miss
 
-@app.route("/users", methods=['GET', 'POST'])
-def users():
-
+# @app.route("/users", methods=['GET', 'POST'])
+# def users():
+#
 
 def score(position, reference=None):
     if not reference:
