@@ -133,10 +133,57 @@ def score(position, reference=None):
     # print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
     return yaw_delta, pitch_delta, roll_delta
 
-@app.route('/')
-def foo():
-    return 'hi'
+import time
+import uuid
+dan_id = str(uuid.uuid4())
+bob_id = str(uuid.uuid4())
+@app.route('/users')
+def users():
+    return jsonify([
+        {
+            "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+            "name": "Dan",
+            "user_id": dan_id
+        },
+        {
+            "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/17761164_10155154480811796_246260306778900723_o.jpg?_nc_cat=0&oh=a7d2233f1545e6ae245896de0254a3a5&oe=5B7163B4",
+            "name": "Bob",
+            "user_id": bob_id
+        }
+    ])
 
+@app.route('/incidents')
+def incidents():
+    return jsonify([
+        {
+            "incident_id": str(uuid.uuid4()),
+            "timestamp": int(time.time()),
+            "img_urls": [
+                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034"],
+            "issue": None,
+            "reviewed_at": None,
+            "user": {
+                "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+                "name": "Dan",
+                "user_id": dan_id
+            },
+        },
+        {
+            "incident_id": str(uuid.uuid4()),
+            "timestamp": int(time.time()),
+            "img_urls": [
+                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034"],
+            "issue": "completely_fucked",
+            "reviewed_at": int(time.time()),
+            "user": {
+                "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/17761164_10155154480811796_246260306778900723_o.jpg?_nc_cat=0&oh=a7d2233f1545e6ae245896de0254a3a5&oe=5B7163B4",
+                "name": "Bob",
+                "user_id": bob_id
+            }
+        }
+    ])
 
 if __name__ == "__main__":
     app.run()
