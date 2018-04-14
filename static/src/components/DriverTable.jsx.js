@@ -14,8 +14,8 @@ const Styles = {
 		fontWeight: 'bold'
 	},
 	table: {
-		position: 'relative',
-		left: 40
+		position: 'relative'
+		// left: 40
 	}
 }
 
@@ -31,14 +31,7 @@ export default class DriverTable extends React.Component {
 					<span style={Styles.date}> Drivers </span>
 				</div>
 				<div style={Styles.table}>
-					<Table
-						basic="very"
-						collapsing
-						singleLine
-						selectable
-						fixed
-						textAlign="left"
-					>
+					<Table singleLine selectable textAlign="left">
 						<Table.Header>
 							<Table.Row>
 								<Table.HeaderCell />
