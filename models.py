@@ -1,5 +1,5 @@
 from mongoengine import *                           # To define a schema for a
-
+import datetime
 
 class User(Document):
     user_id = IntField(primary_key=True)
@@ -50,11 +50,11 @@ class Incident(Document):
     def to_json(self):
         return {
             'incident_id': self.incident_id,
-            'timestamp': self.timestamp,
+            'timestamp': readable_time(self.timestamp),
             'img_urls': self.images,
             'user': self.user.to_json(),
             'issue': self.issue,
-            'reviewed_at': self.reviewed_at
+            'reviewed_at': readable_time(self.reviewed_at)
         }
 
         # {
@@ -69,3 +69,6 @@ class Incident(Document):
         #         "user_id": "100"
         #     }
         # }
+
+def readable_time(ts):
+    return datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')
