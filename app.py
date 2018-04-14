@@ -4,7 +4,8 @@ from flask import Flask, request, send_from_directory, jsonify
 from models import *
 import json
 from mongoengine import connect
-import random
+import time
+import uuid
 
 app = Flask(__name__)
 url = 'tolipoc/63536:moc.balm.635360sd@nadnad:nad//:bdognom'[::-1]
@@ -13,6 +14,63 @@ connect(host=url)
 @app.route("/", methods=['GET', 'POST'])
 def index():
     return send_from_directory('static/dist', 'index.html')
+
+@app.route('/incident', methods=['GET', 'POST'])
+def create_incident():
+    data = request.get_json()
+    if not data:
+        data = {
+            'incident_id': '1234',
+            'user_id': 1,
+            'images': ['img1', 'img2'],
+        }
+    incident_id = data.get('incident_id')
+    try:
+        Incident.objects.get(incident_id).delete()
+    except:
+        pass
+
+    user_id = data.get('user_id')
+    user = User.objects.get(user_id=user_id)
+
+    issue = data.get('issue') or 'unresolved'
+    incident = Incident()
+    incident.incident_id = incident_id
+    incident.timestamp = time.time()
+    incident.incident_id = incident_id
+    incident.issue = issue
+    incident.user = user
+    incident.images = data['images']
+    incident.save()
+    return jsonify(incident.to_json())
+
+@app.route('/resolve_incident', methods=['GET', 'POST'])
+def resolve_incident():
+    data = request.get_json()
+    if not data:
+        data = {
+            'incident_id': '1234',
+            'issue': 'super happy %s' % str(uuid.uuid4())
+        }
+
+    incident_id = data['incident_id']
+    issue = data['issue']
+
+    incident = Incident.objects.get(incident_id=incident_id)
+    incident.issue = issue
+    incident.reviewed_at = time.time()
+    incident.save()
+    return jsonify(incident.to_json())
+
+@app.route('/users')
+def users():
+    users = User.objects.all()
+    return jsonify([u.to_json() for u in users])
+
+@app.route('/incidents')
+def incidents():
+    all_incidents = Incident.objects.all()
+    return jsonify([x.to_json() for x in all_incidents])
 
 @app.route("/ulu", methods=['GET', 'POST'])
 def ulu():
@@ -167,53 +225,51 @@ import time
 import uuid
 dan_id = str(uuid.uuid4())
 bob_id = str(uuid.uuid4())
-@app.route('/users')
-def users():
-    return jsonify([
-        {
-            "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
-            "name": "Dan",
-            "user_id": dan_id
-        },
-        {
-            "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/17761164_10155154480811796_246260306778900723_o.jpg?_nc_cat=0&oh=a7d2233f1545e6ae245896de0254a3a5&oe=5B7163B4",
-            "name": "Bob",
-            "user_id": bob_id
-        }
-    ])
-
-@app.route('/incidents')
-def incidents():
-    return jsonify([
-        {
-            "incident_id": str(uuid.uuid4()),
-            "timestamp": int(time.time()),
-            "img_urls": [
-                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
-                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034"],
-            "issue": None,
-            "reviewed_at": None,
-            "user": {
-                "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
-                "name": "Dan",
-                "user_id": dan_id
-            },
-        },
-        {
-            "incident_id": str(uuid.uuid4()),
-            "timestamp": int(time.time()),
-            "img_urls": [
-                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
-                "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034"],
-            "issue": "completely_fucked",
-            "reviewed_at": int(time.time()),
-            "user": {
-                "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/17761164_10155154480811796_246260306778900723_o.jpg?_nc_cat=0&oh=a7d2233f1545e6ae245896de0254a3a5&oe=5B7163B4",
-                "name": "Bob",
-                "user_id": bob_id
-            }
-        }
-    ])
+# def users():
+#     return jsonify([
+#         {
+#             "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+#             "name": "Dan",
+#             "user_id": dan_id
+#         },
+#         {
+#             "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/17761164_10155154480811796_246260306778900723_o.jpg?_nc_cat=0&oh=a7d2233f1545e6ae245896de0254a3a5&oe=5B7163B4",
+#             "name": "Bob",
+#             "user_id": bob_id
+#         }
+#     ])
+#
+# def incidents():
+#     return jsonify([
+#         {
+#             "incident_id": str(uuid.uuid4()),
+#             "timestamp": int(time.time()),
+#             "img_urls": [
+#                 "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+#                 "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034"],
+#             "issue": None,
+#             "reviewed_at": None,
+#             "user": {
+#                 "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+#                 "name": "Dan",
+#                 "user_id": dan_id
+#             },
+#         },
+#         {
+#             "incident_id": str(uuid.uuid4()),
+#             "timestamp": int(time.time()),
+#             "img_urls": [
+#                 "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034",
+#                 "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034"],
+#             "issue": "completely_fucked",
+#             "reviewed_at": int(time.time()),
+#             "user": {
+#                 "img_url": "https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/17761164_10155154480811796_246260306778900723_o.jpg?_nc_cat=0&oh=a7d2233f1545e6ae245896de0254a3a5&oe=5B7163B4",
+#                 "name": "Bob",
+#                 "user_id": bob_id
+#             }
+#         }
+#     ])
 
 if __name__ == "__main__":
     app.run()

@@ -1,4 +1,5 @@
-/users
+GET /users
+/args
   - int timestamp (would str be easier)
   - string img_url
   - string name
@@ -18,7 +19,8 @@
 ]
 
 
-/incidents
+GET /incidents
+Returns
   - string incident_id
   - int timestamp
   - list[string] img_urls
@@ -52,3 +54,25 @@
         }
     }
 ]
+
+POST /incident
+args
+ - string incident_id
+ - int user_id
+ - list[string] image_urls
+{
+    'incident_id': '1234',
+    'user_id': 1,
+    'images': ['img1', 'img2'],
+}
+
+
+POST /resolve_incident
+args
+  - string incident_id
+  - string issue
+
+{
+    'incident_id': '1234',
+    'issue': 'its fine'
+}
