@@ -123,12 +123,12 @@ def ulu():
             ]
         }
 
-    try:
-        user = User.objects.get(user_id = data['user_id'])
-    except:
-        print 'creating user'
-        user = User(user_id=data['user_id'])
-        user.save()
+    # try:
+    #     user = User.objects.get(user_id = data['user_id'])
+    # except:
+    #     print 'creating user'
+    #     user = User(user_id=data['user_id'])
+    #     user.save()
 
     point = Point()
     point.location = Location(**data['location'])
@@ -143,12 +143,11 @@ def ulu():
             point.head_positions.append(head_position)
             point.camera_positions.append(camera_position)
 
-    # point.alert = alert(point.head_positions)
-    point.user = user
-    point.save()
+    # point.user = user
+    # point.save()
 
-    user.points.append(point)
-    user.save()
+    # user.points.append(point)
+    # user.save()
 
 
     x =  jsonify(
