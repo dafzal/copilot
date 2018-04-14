@@ -1,6 +1,7 @@
 import React from 'react'
 import UserIncident from './Incident.jsx'
 import { Segment, Header, Table } from 'semantic-ui-react'
+import $ from 'jquery'
 
 const Styles = {
 	divider: {
@@ -24,9 +25,33 @@ const Styles = {
 export default class UserIncidentTable extends React.Component {
 	constructor(props) {
 		super(props)
+		this.getData = this.getData.bind(this)
+		this.state = {
+			incidents: []
+		}
+	}
+
+	getData() {
+		$.ajax({
+			url: `/incidents`,
+			type: 'POST',
+			contentType: 'application/json',
+			dataType: 'json',
+			data: JSON.stringify({
+				incident_id: this.props.id
+			}),
+			success: data => {
+				this.setState({ incidents: data })
+				console.log(data)
+			},
+			error: err => {
+				console.error(err)
+			}
+		})
 	}
 
 	render() {
+		this.getData()
 		return (
 			<div style={Styles.table}>
 				<Table singleLine selectable textAlign="left">
@@ -38,17 +63,16 @@ export default class UserIncidentTable extends React.Component {
 						</Table.Row>
 					</Table.Header>
 
-					<Table.Body>
-						{this.props.data.map(row => (
-							<Incident
-								data={row}
-								id={row.incident_id}
-								submit={this.props.submit}
-							/>
-						))}
-					</Table.Body>
+					<Table.Body />
 				</Table>
 			</div>
 		)
 	}
 }
+/*	{this.props.data.map(row => (
+							<Incident
+								data={row}
+								id={row.incident_id}
+								submit={this.props.submit}
+							/>
+						))}*/

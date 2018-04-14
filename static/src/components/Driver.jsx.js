@@ -1,5 +1,5 @@
 import React from 'react'
-import { Card, Image, Table } from 'semantic-ui-react'
+import { Card, Image, Table, Modal, Button } from 'semantic-ui-react'
 import UserIncidentTable from './UserIncidentTable.jsx'
 
 const Styles = {
@@ -32,7 +32,7 @@ export default class Driver extends React.Component {
 							Incident Log for {user.name}
 						</Modal.Header>
 						<Modal.Content>
-							<UserIncidentTable />
+							<UserIncidentTable id={user.user_id} />
 						</Modal.Content>
 					</Modal>
 				</Table.Cell>

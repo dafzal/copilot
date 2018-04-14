@@ -110,7 +110,7 @@ def users():
     users = User.objects.all()
     return jsonify([u.to_json() for u in users])
 
-@app.route('/incidents')
+@app.route('/incidents',  methods=['GET', 'POST'])
 def incidents():
     try:
         data = request.get_json()

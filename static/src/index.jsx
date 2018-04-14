@@ -65,7 +65,7 @@ export default class App extends React.Component {
   }
 
   componentDidMount() {
-    this.interval = setInterval(this.poll, 1000)
+    this.interval = setInterval(this.poll, 3000)
     // this.poll()
   }
 
