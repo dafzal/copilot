@@ -130,7 +130,7 @@ def score(position, reference=None):
     yaw_delta = abs(reference[0][2] - position[0][2]) + abs(reference[2][0] - position[2][0])
     pitch_delta = abs(reference[1][2] - position[1][2]) + abs(reference[2][1] - position[2][1])
     roll_delta = abs(reference[0][1] - position[0][1]) + abs(reference[1][0] - position[1][0])
-    print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
+    # print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
     return yaw_delta, pitch_delta, roll_delta
 
 @app.route('/')
