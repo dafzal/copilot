@@ -40,6 +40,7 @@ export default class UserIncident extends React.Component {
 	render() {
 		let data = this.props.data
 		let user = data.user
+		console.log('in user incident')
 		return (
 			<Table.Row>
 				<Table.Cell>{data.timestamp}</Table.Cell>

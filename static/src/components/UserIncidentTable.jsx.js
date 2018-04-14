@@ -42,7 +42,6 @@ export default class UserIncidentTable extends React.Component {
 			}),
 			success: data => {
 				this.setState({ incidents: data })
-				console.log(data)
 			},
 			error: err => {
 				console.error(err)
