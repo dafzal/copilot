@@ -6,3 +6,4 @@ dnspython
 imageio
 boto
 requests
+gevent
