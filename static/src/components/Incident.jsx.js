@@ -9,6 +9,7 @@ import {
 	Input
 } from 'semantic-ui-react'
 import $ from 'jquery'
+import Chart from 'chart.js'
 
 const Styles = {
 	truncate: {
@@ -25,6 +26,7 @@ export default class Incident extends React.Component {
 		this.submit = this.submit.bind(this)
 		this.handleClose = this.handleClose.bind(this)
 		this.onOpen = this.onOpen.bind(this)
+		this.removeIncident = this.removeIncident.bind(this)
 		this.state = {
 			issue: '',
 			modalOpen: false
@@ -44,6 +46,27 @@ export default class Incident extends React.Component {
 	onOpen() {
 		this.setState({ modalOpen: true })
 	}
+
+	removeIncident(e, d) {
+		$.ajax({
+			url: `/resolve_incident`,
+			type: 'POST',
+			contentType: 'application/json',
+			dataType: 'json',
+			data: JSON.stringify({
+				incident_id: this.props.data.incident_id,
+				issue: d.value
+			}),
+			success: data => {
+				console.log('error in submitting resolution')
+			},
+			error: err => {
+				console.error(err)
+			}
+		})
+		this.setState({ modalOpen: false })
+	}
+
 	render() {
 		let data = this.props.data
 		let user = data.user
@@ -52,7 +75,7 @@ export default class Incident extends React.Component {
 				<Table.Cell>{data.timestamp}</Table.Cell>
 				<Table.Cell>
 					<Header as="h4" image>
-						<Image src={user.img_url} rounded size="mini" />
+						<Image src={data.img_urls[0]} rounded size="mini" />
 						<Header.Content>
 							{user.name}
 							<Header.Subheader>
@@ -80,9 +103,15 @@ export default class Incident extends React.Component {
 							<Button
 								onClick={this.onOpen}
 								basic
-								color={data.reviewed_at ? 'green' : 'red'}
+								color={
+									data.reviewed_at === 'unresolved'
+										? 'red'
+										: 'green'
+								}
 							>
-								{data.reviewed_at ? 'See More' : 'Review Now'}
+								{data.reviewed_at === 'unresolved'
+									? 'Review Now'
+									: 'See More / Remove'}
 							</Button>
 						}
 					>
@@ -93,35 +122,16 @@ export default class Incident extends React.Component {
 							</Image.Group>
 						</Modal.Content>
 						<Modal.Actions>
-							<Modal
-								onClose={this.handleClose}
-								trigger={
-									<Button
-										basic
-										color={
-											data.reviewed_at ? 'green' : 'red'
-										}
-									>
-										{data.reviewed_at
-											? 'Review Again'
-											: 'Review Now'}
-									</Button>
-								}
+							<Button onClick={this.removeIncident} value="issue">
+								This is a Problem
+							</Button>
+							<Button
+								onClick={this.removeIncident}
+								value="notIssue"
 							>
-								<Modal.Header>Submit Report</Modal.Header>
-								<Modal.Content>
-									<Input
-										placeholder="Search..."
-										onChange={this.input}
-									/>
-								</Modal.Content>
-								<Modal.Actions>
-									{' '}
-									<Button onClick={this.submit}>
-										Submit
-									</Button>
-								</Modal.Actions>
-							</Modal>
+								{' '}
+								This is not a problem{' '}
+							</Button>
 						</Modal.Actions>
 					</Modal>
 				</Table.Cell>

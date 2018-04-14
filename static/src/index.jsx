@@ -26,6 +26,7 @@ export default class App extends React.Component {
       contentType: 'application/json',
       success: data => {
         this.setState({ incidents: data })
+        console.log(data)
       },
       error: err => {
         console.error(err)

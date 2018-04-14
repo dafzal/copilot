@@ -34,7 +34,7 @@ export default class HeadBanner extends React.Component {
 	render() {
 		return (
 			<div>
-				<img className="header" />
+				<img className="banner" />
 				<div style={Styles.columns}>
 					<div onClick={this.screenClick} id="incident">
 						{this.props.incident} Incidents

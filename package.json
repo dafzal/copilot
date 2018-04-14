@@ -18,10 +18,12 @@
   },
   "dependencies": {
     "body-parser": "^1.17.2",
+    "chart.js": "^2.7.2",
     "express": "^4.15.0",
     "flask": "^0.2.10",
     "jquery": "^3.1.1",
     "react": "^15.4.2",
+    "react-chartjs": "^1.2.0",
     "react-dom": "^15.4.2",
     "semantic-ui-react": "^0.79.1"
   }

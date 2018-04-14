@@ -15,8 +15,8 @@ const Styles = {
 	},
 	table: {
 		// position: 'relative'
-		float: 'none',
-		margin: 0
+		// float: 'none',
+		// margin: 0
 		// auto
 	}
 }
