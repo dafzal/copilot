@@ -20,53 +20,31 @@ def ulu():
     print data
     if not data:
         data = {
-            'user_id': 1,
-            'head_positions': [
-                {
-                    'time_ms': 1523673929746,
-                    'position': [
-                        [0.999838, -0.0166354, -0.00689306, 0.0],
-                        [0.0176833, 0.979327, 0.201511, 0.0],
-                        [0.00339834, -0.2016, 0.979462, 0.0],
-                        [-0.0161541, 0.0116044, -0.358902, 1.0]
-                    ]
-                },
-                {
-                    'time_ms': 1523673929846,
-                    'position': [
-                         [0.86698, -0.0411894, -0.496637, 0.0],
-                         [0.0823146, 0.994725, 0.0611975, 0.0],
-                         [0.491497, -0.0939376, 0.865797, 0.0],
-                         [-0.0373612, 0.0185152, -0.343818, 1.0]
-                    ]
-                },
-                {
-                    'time_ms': 1523673929946,
-                    'position': [
-                         [0.876514, -0.0315314, 0.480343, 0.0],
-                         [0.0268818, 0.999501, 0.0165579, 0.0],
-                         [-0.480626, -0.00160074, 0.876924, 0.0],
-                         [-0.00508672, -0.020439, -0.439621, 1.0]
-                    ]
-                },
-                {
-                    'time_ms': 1523673930746,
-                    'position': [
-                        [0.998138, -0.028353, -0.0540089, 0.0],
-                        [0.0061001, 0.927367, -0.374104, 0.0],
-                        [0.060693, 0.373078, 0.925813, 0.0],
-                        [-0.0341526, 0.0826031, -0.546372, 1.0]
-                    ]
-                }
+            u'user_id': 1,
+            u'location':
+                {u'lat': 37.386251,
+                 u'lng': -122.0668649,
+                 u'speed_mps': 15.64,
+                 u'horizontal_accuracy_m': 5.2,
+                 u'vertical_accuracy_m': 4.6,
+                 u'altitude_m': 50.2
+                 },
+            u'head_positions': [
+                {u'position': [
+                    [-0.9867934584617615, 0.03660966828465462, 0.1577843427658081, 0],
+                    [-0.024106867611408234, 0.9300681948661804, -0.366578608751297, 0],
+                    [-0.16017526388168335, -0.36554259061813354, -0.9169032573699951, 0],
+                    [0.06864194571971893, 0.1950957328081131, 0.38621342182159424, 1]],
+                    u'time_ms': 1523718173693}
             ],
-            'location': {
-                'lat': 37.386251,
-                'lng': -122.0668649,
-                'altitude_m': 50.2,
-                'speed_mps': 15.64,
-                'horizontal_accuracy_m': 5.2,
-                'vertical_accuracy_m': 4.6
-            }
+            u'camera_positions': [
+                {u'position': [
+                    [0.03457019478082657, -0.8862884640693665, 0.4618278741836548, 0],
+                    [-0.9986507892608643, -0.012730330228805542, 0.05032804608345032, 0],
+                    [-0.03872963413596153, -0.4629458487033844, -0.8855332732200623, 0],
+                    [0, 0, 0, 1]],
+                    u'time_ms': 1523718173696}
+            ]
         }
 
     try:
@@ -81,11 +59,15 @@ def ulu():
     point = Point()
     point.location = Location(**data['location'])
 
-    for p in data['head_positions']:
-        if p:
+    for p, c in zip(data['head_positions'], data['camera_positions']):
+        if p and c:
             head_position = HeadPosition(**p)
-            head_position.yaw_delta, head_position.pitch_delta, head_position.roll_delta = score(p['position'])
+            camera_position = CameraPosition(**c)
+
+            head_position.yaw_delta, head_position.pitch_delta, head_position.roll_delta = score(p['position'], c['position'])
+
             point.head_positions.append(head_position)
+            point.camera_positions.append(camera_position)
 
     point.alert = alert(point.head_positions)
     point.user = user
@@ -127,8 +109,13 @@ def score(position, reference=None):
     #     R, 1, P,
     #     Y, P, 1,
     # ]
+    print 'face'
     for i in xrange(3):
-        print ' '.join(['%.2f' % x for x in position[i][:3]])
+        print ' '.join(['%.1f' % x for x in position[i][:3]])
+    print 'camera'
+    for i in xrange(3):
+        print ' '.join(['%.1f' % x for x in reference[i][:3]])
+
     yaw_delta = abs(reference[0][2] - position[0][2]) + abs(reference[2][0] - position[2][0])
     pitch_delta = abs(reference[1][2] - position[1][2]) + abs(reference[2][1] - position[2][1])
     roll_delta = abs(reference[0][1] - position[0][1]) + abs(reference[1][0] - position[1][0])

@@ -11,6 +11,12 @@ class User(Document):
             'user_id': self.user_id,
         }
 
+
+class CameraPosition(EmbeddedDocument):
+    time_ms = FloatField()
+    position = ListField(ListField(FloatField()))
+
+
 class HeadPosition(EmbeddedDocument):
     time_ms = FloatField()
     position = ListField(ListField(FloatField()))
@@ -28,6 +34,7 @@ class Location(EmbeddedDocument):
 
 class Point(Document):
     head_positions = ListField(EmbeddedDocumentField(HeadPosition))
+    camera_positions = ListField(EmbeddedDocumentField(CameraPosition))
     location = EmbeddedDocumentField(Location)
     user = ReferenceField(User)
     alert = BooleanField()
