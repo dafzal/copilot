@@ -35,9 +35,21 @@ def ulu():
                     [-0.024106867611408234, 0.9300681948661804, -0.366578608751297, 0],
                     [-0.16017526388168335, -0.36554259061813354, -0.9169032573699951, 0],
                     [0.06864194571971893, 0.1950957328081131, 0.38621342182159424, 1]],
+                    u'time_ms': 1523718173693},
+                {u'position': [
+                    [-0.9867934584617615, 0.03660966828465462, 0.1577843427658081, 0],
+                    [-0.024106867611408234, 0.9300681948661804, -0.366578608751297, 0],
+                    [-0.16017526388168335, -0.36554259061813354, -0.9169032573699951, 0],
+                    [0.06864194571971893, 0.1950957328081131, 0.38621342182159424, 1]],
                     u'time_ms': 1523718173693}
             ],
             u'camera_positions': [
+                {u'position': [
+                    [0.03457019478082657, -0.8862884640693665, 0.4618278741836548, 0],
+                    [-0.9986507892608643, -0.012730330228805542, 0.05032804608345032, 0],
+                    [-0.03872963413596153, -0.4629458487033844, -0.8855332732200623, 0],
+                    [0, 0, 0, 1]],
+                    u'time_ms': 1523718173696},
                 {u'position': [
                     [0.03457019478082657, -0.8862884640693665, 0.4618278741836548, 0],
                     [-0.9986507892608643, -0.012730330228805542, 0.05032804608345032, 0],
@@ -49,12 +61,10 @@ def ulu():
 
     try:
         user = User.objects.get(user_id = data['user_id'])
-        found_user = True
     except:
         print 'creating user'
         user = User(user_id=data['user_id'])
         user.save()
-        found_user=False
 
     point = Point()
     point.location = Location(**data['location'])
@@ -64,12 +74,12 @@ def ulu():
             head_position = HeadPosition(**p)
             camera_position = CameraPosition(**c)
 
-            head_position.yaw_delta, head_position.pitch_delta, head_position.roll_delta = score(p['position'], c['position'])
+            head_position.score = score(p['position'], c['position'])
 
             point.head_positions.append(head_position)
             point.camera_positions.append(camera_position)
 
-    point.alert = alert(point.head_positions)
+    # point.alert = alert(point.head_positions)
     point.user = user
     point.save()
 
@@ -77,13 +87,10 @@ def ulu():
     user.save()
 
 
-    x =  jsonify(success=True,
-                   attention=random.random(),
-                   found_user=found_user,
-                   pitch_delta=[hp.pitch_delta for hp in point.head_positions],
-                   yaw_delta=[hp.yaw_delta for hp in point.head_positions],
-                   roll_delta=[hp.roll_delta for hp in point.head_positions],
-                   alert=point.alert)
+    x =  jsonify(
+        success=True,
+        scores = [{'score': hp.score, 'time_ms': hp.time_ms} for hp in point.head_positions]
+    )
     return x
 
 def alert(head_positions):
@@ -147,14 +154,14 @@ def score(face, camera):
     for i in xrange(3):
         print ' '.join(['%.1f' % x for x in delta_transform[i][:3]])
 
-    score2(delta_transform)
+    return score2(delta_transform)
 
 
     # yaw_delta = abs(reference[0][2] - position[0][2]) + abs(reference[2][0] - position[2][0])
     # pitch_delta = abs(reference[1][2] - position[1][2]) + abs(reference[2][1] - position[2][1])
     # roll_delta = abs(reference[0][1] - position[0][1]) + abs(reference[1][0] - position[1][0])
     # print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
-    return 0, 0, 0
+    # return 0, 0, 0
 
 import time
 import uuid

@@ -20,9 +20,7 @@ class CameraPosition(EmbeddedDocument):
 class HeadPosition(EmbeddedDocument):
     time_ms = FloatField()
     position = ListField(ListField(FloatField()))
-    yaw_delta = FloatField()
-    pitch_delta = FloatField()
-    roll_delta = FloatField()
+    score = FloatField()
 
 class Location(EmbeddedDocument):
     lat = FloatField()
