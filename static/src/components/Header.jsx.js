@@ -3,8 +3,9 @@ import { Segment, Header, Image, Button } from 'semantic-ui-react'
 
 const Styles = {
 	banner: {
-		height: 250,
-		backgroundColor: 'black'
+		position: 'absolute',
+		top: 10,
+		right: 10
 	},
 	title: {
 		color: 'white',
@@ -34,7 +35,7 @@ export default class HeadBanner extends React.Component {
 		return (
 			<div>
 				<Image src="../static/dist/assets/Header.png" />
-				<Button> Alerts </Button>
+				<Button style={Styles.banner}> Alerts </Button>
 			</div>
 		)
 	}

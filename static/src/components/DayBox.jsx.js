@@ -31,7 +31,13 @@ export default class DayBox extends React.Component {
 					<span style={Styles.date}> {this.props.date} </span>
 				</div>
 				<div style={Styles.table}>
-					<Table basic="very" collapsing singleLine selectable>
+					<Table
+						basic="very"
+						collapsing
+						singleLine
+						selectable
+						color="red"
+					>
 						<Table.Header>
 							<Table.Row>
 								<Table.HeaderCell>Time</Table.HeaderCell>
