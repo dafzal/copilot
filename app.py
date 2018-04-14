@@ -20,7 +20,7 @@ def create_incident():
     data = request.get_json()
     if not data:
         data = {
-            'incident_id': '1234',
+            'incident_id': str(uuid.uuid4()),
             'user_id': 1,
             'images': ['img1', 'img2'],
         }
@@ -54,8 +54,9 @@ def resolve_incident():
         raise
     print 'data is %s' % data
     if not data:
+        incident_id = random.choice([x for x in list(Incident.objects.all()) if not x.reviewed_at] or [Incident.objects.all()[0]]).incident_id
         data = {
-            'incident_id': '1234',
+            'incident_id': incident_id,
             'issue': 'super happy %s' % str(uuid.uuid4())
         }
     print data
