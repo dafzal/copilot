@@ -14,7 +14,7 @@ connect(host=url)
 def receive_message():
     return send_from_directory('static/dist', 'index.html')
 
-@app.route("/ulu", methods=['GET', 'POST'])
+# @app.route("/ulu", methods=['GET', 'POST'])
 def receive_message():
     data = request.get_json()
     # print data
