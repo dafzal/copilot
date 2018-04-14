@@ -80,9 +80,10 @@ def receive_message():
     point.location = Location(**data['location'])
 
     for p in data['head_positions']:
-        head_position = HeadPosition(**p)
-        head_position.yaw_delta, head_position.pitch_delta, head_position.roll_delta = score(p['position'])
-        point.head_positions.append(head_position)
+        if p:
+            head_position = HeadPosition(**p)
+            head_position.yaw_delta, head_position.pitch_delta, head_position.roll_delta = score(p['position'])
+            point.head_positions.append(head_position)
 
     point.alert = alert(point.head_positions)
     point.user = user
@@ -92,13 +93,14 @@ def receive_message():
     user.save()
 
 
-    return jsonify(success=True,
+    x =  jsonify(success=True,
                    attention=random.random(),
                    found_user=found_user,
                    pitch_delta=[hp.pitch_delta for hp in point.head_positions],
                    yaw_delta=[hp.yaw_delta for hp in point.head_positions],
                    roll_delta=[hp.roll_delta for hp in point.head_positions],
                    alert=point.alert)
+    return x
 
 def alert(head_positions):
     hit = 0
@@ -126,6 +128,7 @@ def score(position, reference=None):
     yaw_delta = abs(reference[0][2] - position[0][2]) + abs(reference[2][0] - position[2][0])
     pitch_delta = abs(reference[1][2] - position[1][2]) + abs(reference[2][1] - position[2][1])
     roll_delta = abs(reference[0][1] - position[0][1]) + abs(reference[1][0] - position[1][0])
+    print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
     return yaw_delta, pitch_delta, roll_delta
 
 @app.route('/')
