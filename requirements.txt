@@ -5,4 +5,5 @@ mongoengine
 dnspython
 imageio
 boto
+requests
 gevent

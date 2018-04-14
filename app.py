@@ -1,13 +1,17 @@
 #Python libraries that we need to import for our bot
+print 'monkey'
+from gevent import monkey
+import gevent
+monkey.patch_all()
+print 'end monkey'
 import random
 from flask import Flask, request, send_from_directory, jsonify
 from models import *
-import json
 from mongoengine import connect
 import time
 import uuid
 import imageio
-import gevent
+
 import boto
 
 app = Flask(__name__)
@@ -26,7 +30,7 @@ def create_incident():
     if not data:
         data = {
             'incident_id': str(uuid.uuid4()),
-            'user_id': 1,
+            'user_id': 2,
             'images': ['https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034',
                        'https://s3-us-west-1.amazonaws.com/copilot-incident-images/1_1523727678902.jpg',
                        'https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/20247743_10111537135804181_3181030631316154852_o.jpg?_nc_cat=0&oh=0d45848e8f2972545593881487840cb7&oe=5B62C3FC',
@@ -108,8 +112,22 @@ def users():
 
 @app.route('/incidents')
 def incidents():
-    all_incidents = Incident.objects.all()
-    return jsonify([x.to_json() for x in all_incidents])
+    try:
+        data = request.get_json()
+    except:
+        data = {}
+
+    if not data:
+        data = {}
+    user_id = data.get('user_id')
+
+    all_incidents = list(Incident.objects.all())[::-1]
+    unresolved = [r for r in all_incidents if not r.reviewed_at]
+
+    if user_id:
+        return jsonify([x.to_json() for x in all_incidents if x.user.user_id == user_id and ((x.issue == 'issue' and r.reviewed_at) or not r.reviewed_at)])
+    else:
+        return jsonify([x.to_json() for x in unresolved])
 
 @app.route("/ulu", methods=['GET', 'POST'])
 def ulu():
@@ -117,7 +135,7 @@ def ulu():
     print data
     if not data:
         data = {
-            u'user_id': 1,
+            u'user_id': 2,
             u'location':
                 {u'lat': 37.386251,
                  u'lng': -122.0668649,
@@ -156,12 +174,13 @@ def ulu():
             ]
         }
 
-    # try:
-    #     user = User.objects.get(user_id = data['user_id'])
-    # except:
-    #     print 'creating user'
-    #     user = User(user_id=data['user_id'])
-    #     user.save()
+    try:
+        user = User.objects.get(user_id = data['user_id'])
+    except:
+        print 'creating user'
+        user = User(user_id=data['user_id'])
+        user.name = 'Mishall'
+        user.save()
 
     point = Point()
     point.location = Location(**data['location'])
@@ -259,10 +278,6 @@ def score(face, camera):
     # print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
     # return 0, 0, 0
 
-import time
-import uuid
-dan_id = str(uuid.uuid4())
-bob_id = str(uuid.uuid4())
 # def users():
 #     return jsonify([
 #         {
