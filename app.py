@@ -96,6 +96,25 @@ def alert(head_positions):
             miss += 1
     return hit > miss
 
+import math
+def magnitude(x):
+    return math.sqrt(x[0]**2 + x[1]**2 + x[2]**2)
+
+def score2(mtrx):
+    x = [x[0] for x in mtrx[:3]]
+    y = [x[1] for x in mtrx[:3]]
+    z = [x[2] for x in mtrx[:3]]
+    print 'score2 x %s y %s z %s' % (x, y, z)
+
+    x = magnitude(x)
+    y = magnitude(y)
+    z = magnitude(z)
+    total = magnitude([x, y, z])
+    print 'total score x %s y %s z %s total %s' % (x, y, z, total)
+    return total
+
+
+
 def score(face, camera):
 
     # [
@@ -127,6 +146,8 @@ def score(face, camera):
     print 'delta'
     for i in xrange(3):
         print ' '.join(['%.1f' % x for x in delta_transform[i][:3]])
+
+    score2(delta_transform)
 
 
     # yaw_delta = abs(reference[0][2] - position[0][2]) + abs(reference[2][0] - position[2][0])
