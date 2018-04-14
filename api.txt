@@ -1,0 +1,54 @@
+/users
+  - int timestamp (would str be easier)
+  - string img_url
+  - string name
+  - string user_id
+
+[
+    {
+        "img_url": foo.com/img1.jpg,
+        "name": "Dan",
+        "user_id": "33196"
+    },
+    {
+        "img_url": foo.com/img2.jpg,
+        "name": "Bob",
+        "user_id": "100"
+    }
+]
+
+
+/incidents
+  - string incident_id
+  - int timestamp
+  - list[string] img_urls
+  - string|None issue
+  - int|None reviewed_at
+  - User user
+
+[
+    {
+        "incident_id": "dsalfjk",
+        "timestamp": 5000,
+        "img_urls": ["url1", "url2"],
+        "issue": None,
+        "reviewed_at": None,
+        "user": {
+            "img_url": foo.com/img2.jpg,
+            "name": "Bob",
+            "user_id": "100"
+        }
+    },
+    {
+        "incident_id": "wqer",
+        "timestamp": 5000,
+        "img_urls": ["url1", "url2"],
+        "issue": "completely_fucked",
+        "reviewed_at": 1000,
+        "user": {
+            "img_url": foo.com/img2.jpg,
+            "name": "Bob",
+            "user_id": "100"
+        }
+    }
+]
