@@ -7,16 +7,18 @@ class User(Document):
     name = StringField(default='Danial')
     incidents = ListField(ReferenceField('Incident'))
     points = ListField(ReferenceField('Point'))
+    user_image = StringField(default=None)
 
     def to_json(self):
-        if self.incidents:
+        if self.user_image:
+            image_url = self.user_image
+        elif self.incidents:
             image_url = self.incidents[-1].images[0]
         else:
             image_url = ''
         return {
             'user_id': self.user_id,
             'name': self.name,
-            # I don't give a fuck, come at me
             'user_image': image_url,
         }
 
@@ -53,7 +55,7 @@ class Incident(Document):
     user = ReferenceField(User)
     incident_id = StringField(primary_key=True)
     issue = StringField()
-    reviewed_at = IntField(default=lambda: int(time.time()))
+    reviewed_at = IntField()
     def to_json(self):
         return {
             'incident_id': self.incident_id,
@@ -78,4 +80,6 @@ class Incident(Document):
         # }
 
 def readable_time(ts):
+    if not ts:
+        return ''
     return datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S')

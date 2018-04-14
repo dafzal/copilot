@@ -1,15 +1,16 @@
 #Python libraries that we need to import for our bot
+print 'monkey'
 from gevent import monkey
+import gevent
 monkey.patch_all()
+print 'end monkey'
 import random
 from flask import Flask, request, send_from_directory, jsonify
 from models import *
-import json
 from mongoengine import connect
 import time
 import uuid
 import imageio
-import gevent
 
 import boto
 
@@ -111,8 +112,22 @@ def users():
 
 @app.route('/incidents')
 def incidents():
-    all_incidents = Incident.objects.all()
-    return jsonify([x.to_json() for x in all_incidents])
+    try:
+        data = request.get_json()
+    except:
+        data = {}
+
+    if not data:
+        data = {}
+    user_id = data.get('user_id')
+
+    all_incidents = list(Incident.objects.all())[::-1]
+    unresolved = [r for r in all_incidents if not r.reviewed_at]
+
+    if user_id:
+        return jsonify([x.to_json() for x in all_incidents if x.user.user_id == user_id and ((x.issue == 'issue' and r.reviewed_at) or not r.reviewed_at)])
+    else:
+        return jsonify([x.to_json() for x in unresolved])
 
 @app.route("/ulu", methods=['GET', 'POST'])
 def ulu():
@@ -262,10 +277,6 @@ def score(face, camera):
     # print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
     # return 0, 0, 0
 
-import time
-import uuid
-dan_id = str(uuid.uuid4())
-bob_id = str(uuid.uuid4())
 # def users():
 #     return jsonify([
 #         {
