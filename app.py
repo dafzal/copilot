@@ -1,4 +1,6 @@
 #Python libraries that we need to import for our bot
+from gevent import monkey
+monkey.patch_all()
 import random
 from flask import Flask, request, send_from_directory, jsonify
 from models import *
@@ -8,6 +10,7 @@ import time
 import uuid
 import imageio
 import gevent
+
 import boto
 
 app = Flask(__name__)
