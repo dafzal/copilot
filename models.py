@@ -13,6 +13,7 @@ class User(Document):
     incidents = ListField(ReferenceField('Incident'))
     points = ListField(ReferenceField('Point'))
     user_image = StringField(default=None)
+    scores = ListField(FloatField())
 
     def to_json(self):
         if self.user_image:
@@ -27,6 +28,7 @@ class User(Document):
             'user_id': self.user_id,
             'name': self.name,
             'user_image': image_url,
+            'scores': self.scores
         }
 
 
@@ -63,6 +65,7 @@ class Incident(Document):
     incident_id = StringField(primary_key=True)
     issue = StringField()
     reviewed_at = IntField()
+    scores = ListField(FloatField())
     def to_json(self):
         return {
             'incident_id': self.incident_id,
@@ -70,7 +73,8 @@ class Incident(Document):
             'img_urls': self.images,
             'user': self.user.to_json(),
             'issue': self.issue,
-            'reviewed_at': readable_time(self.reviewed_at)
+            'reviewed_at': readable_time(self.reviewed_at),
+            'scores': self.scores
         }
 
         # {
@@ -85,6 +89,8 @@ class Incident(Document):
         #         "user_id": "100"
         #     }
         # }
+
+
 
 def readable_time(ts):
     if not ts:
