@@ -1,5 +1,6 @@
 from mongoengine import *                           # To define a schema for a
 import datetime
+import time
 
 class User(Document):
     user_id = IntField(primary_key=True)
@@ -8,9 +9,15 @@ class User(Document):
     points = ListField(ReferenceField('Point'))
 
     def to_json(self):
+        if self.incidents:
+            image_url = self.incidents[-1].images[0]
+        else:
+            image_url = ''
         return {
             'user_id': self.user_id,
-            'name': self.name
+            'name': self.name,
+            # I don't give a fuck, come at me
+            'user_image': image_url,
         }
 
 
@@ -42,11 +49,11 @@ class Point(Document):
 
 class Incident(Document):
     images = ListField(StringField())
-    timestamp = IntField()
+    timestamp = IntField(default=lambda: int(time.time()))
     user = ReferenceField(User)
     incident_id = StringField(primary_key=True)
     issue = StringField()
-    reviewed_at = IntField()
+    reviewed_at = IntField(default=lambda: int(time.time()))
     def to_json(self):
         return {
             'incident_id': self.incident_id,
