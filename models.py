@@ -6,9 +6,18 @@ class User(Document):
     incidents = ListField(ReferenceField('Incident'))
     points = ListField(ReferenceField('Point'))
 
+    def to_json(self):
+        return {
+            'user_id': self.user_id
+            ''
+        }
+
 class HeadPosition(EmbeddedDocument):
     time_ms = FloatField()
     position = ListField(ListField(FloatField()))
+    yaw_delta = FloatField()
+    pitch_delta = FloatField()
+    roll_delta = FloatField()
 
 class Location(EmbeddedDocument):
     lat = FloatField()
@@ -22,6 +31,7 @@ class Point(Document):
     head_positions = ListField(EmbeddedDocumentField(HeadPosition))
     location = EmbeddedDocumentField(Location)
     user = ReferenceField(User)
+    alert = BooleanField()
 
 class Incident(Document):
     points = ListField(ReferenceField(Point))
