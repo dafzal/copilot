@@ -96,31 +96,44 @@ def alert(head_positions):
             miss += 1
     return hit > miss
 
-def score(position, reference=None):
-    if not reference:
-        reference = [
-            [1., 0., 0., 0.],
-            [0., 1., 0., 0.],
-            [0., 0., 1., 0.],
-            [0., 0., 0., 0.]
-        ]
+def score(face, camera):
+
     # [
     #     1, R, Y,
     #     R, 1, P,
     #     Y, P, 1,
     # ]
+    transformed_face = [
+        [-1*x for x in face[1]],
+        [y for y in face[0]],
+        [z for z in face[2]]
+    ]
+    delta_transform = [
+        [x-y for x,y in zip(transformed_face[0], camera[0])],
+        [x-y for x,y in zip(transformed_face[1], camera[1])],
+        [x-y for x,y in zip(transformed_face[2], camera[2])],
+    ]
     print 'face'
     for i in xrange(3):
-        print ' '.join(['%.1f' % x for x in position[i][:3]])
+        print ' '.join(['%.1f' % x for x in face[i][:3]])
     print 'camera'
     for i in xrange(3):
-        print ' '.join(['%.1f' % x for x in reference[i][:3]])
+        print ' '.join(['%.1f' % x for x in camera[i][:3]])
 
-    yaw_delta = abs(reference[0][2] - position[0][2]) + abs(reference[2][0] - position[2][0])
-    pitch_delta = abs(reference[1][2] - position[1][2]) + abs(reference[2][1] - position[2][1])
-    roll_delta = abs(reference[0][1] - position[0][1]) + abs(reference[1][0] - position[1][0])
+    print 'transformed face'
+    for i in xrange(3):
+        print ' '.join(['%.1f' % x for x in transformed_face[i][:3]])
+
+    print 'delta'
+    for i in xrange(3):
+        print ' '.join(['%.1f' % x for x in delta_transform[i][:3]])
+
+
+    # yaw_delta = abs(reference[0][2] - position[0][2]) + abs(reference[2][0] - position[2][0])
+    # pitch_delta = abs(reference[1][2] - position[1][2]) + abs(reference[2][1] - position[2][1])
+    # roll_delta = abs(reference[0][1] - position[0][1]) + abs(reference[1][0] - position[1][0])
     # print 'Yaw %s pitch %s roll %s' % (yaw_delta, pitch_delta, roll_delta)
-    return yaw_delta, pitch_delta, roll_delta
+    return 0, 0, 0
 
 import time
 import uuid
