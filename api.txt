@@ -1,0 +1,13 @@
+/users
+  - int timestamp
+  - string img_url
+  - string name
+  - string user_id
+
+/incidents
+  - string incident_id
+  - int timestamp
+  - list[string] img_urls
+  - bool has_issue
+  - timestamp reviewed_at
+  - User user
