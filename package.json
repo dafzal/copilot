@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start":
-      "webpack --progress -d --config ./static/webpack.config.js --watch",
+    "start": "webpack --progress -d --config ./static/webpack.config.js --watch",
     "server": "flask run"
   },
   "author": "mishroom",
@@ -23,6 +22,7 @@
     "flask": "^0.2.10",
     "jquery": "^3.1.1",
     "react": "^15.4.2",
-    "react-dom": "^15.4.2"
+    "react-dom": "^15.4.2",
+    "semantic-ui-react": "^0.79.1"
   }
 }
