@@ -24,6 +24,18 @@ bucket = conn.get_bucket('copilot-incident-images', validate=False)
 def index():
     return send_from_directory('static/dist', 'index.html')
 
+USER_ID_NAME = {
+    1: 'danial',
+    2: 'mishall',
+    3: 'adam'
+}
+def create_user(user_id):
+    user = User(user_id=user_id)
+    if user_id in USER_ID_NAME:
+        user.name = USER_ID_NAME[user_id]
+    user.save()
+    return user
+
 @app.route('/incident', methods=['GET', 'POST'])
 def create_incident():
     data = request.get_json()
@@ -64,8 +76,10 @@ def create_incident():
     print 'done uploading gif'
 
     user_id = data.get('user_id')
-    user = User.objects.get(user_id=user_id)
-
+    try:
+        user = User.objects.get(user_id=user_id)
+    except:
+        user = create_user(user_id)
     issue = data.get('issue') or 'unresolved'
     incident = Incident()
     incident.incident_id = incident_id
@@ -179,9 +193,7 @@ def ulu():
         user = User.objects.get(user_id = data['user_id'])
     except:
         print 'creating user'
-        user = User(user_id=data['user_id'])
-        user.name = 'Mishall'
-        user.save()
+        user = create_user(data['user_id'])
 
     point = Point()
     point.location = Location(**data['location'])
