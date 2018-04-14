@@ -11,13 +11,13 @@ url = 'tolipoc/63536:moc.balm.635360sd@nadnad:nad//:bdognom'[::-1]
 connect(host=url)
 
 @app.route("/", methods=['GET', 'POST'])
-def receive_message():
+def index():
     return send_from_directory('static/dist', 'index.html')
 
-# @app.route("/ulu", methods=['GET', 'POST'])
-def receive_message():
+@app.route("/ulu", methods=['GET', 'POST'])
+def ulu():
     data = request.get_json()
-    # print data
+    print data
     if not data:
         data = {
             'user_id': 1,
