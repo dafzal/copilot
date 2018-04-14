@@ -8,10 +8,13 @@ var setHeight = function() {
 	return height / 2
 }
 const Styles = {
-	header: {},
+	header: {
+		position: 'relative',
+		height: 'auto'
+	},
 	columns: {
 		position: 'absolute',
-		top: 200,
+		top: 120,
 		left: 40,
 		fontSize: 28,
 		color: 'white',
@@ -31,10 +34,7 @@ export default class HeadBanner extends React.Component {
 	render() {
 		return (
 			<div>
-				<img
-					style={Styles.header}
-					src="../static/dist/assets/Header.png"
-				/>
+				<img className="header" />
 				<div style={Styles.columns}>
 					<div onClick={this.screenClick} id="incident">
 						{this.props.incident} Incidents
