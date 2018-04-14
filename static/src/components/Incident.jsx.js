@@ -8,6 +8,7 @@ import {
 	Button,
 	Input
 } from 'semantic-ui-react'
+import $ from 'jquery'
 
 const Styles = {
 	truncate: {
@@ -32,6 +33,7 @@ export default class Incident extends React.Component {
 	}
 	submit() {
 		//ajax call to api to send status
+		this.props.submit(this.props.data.incident_id, this.state.issue)
 	}
 	render() {
 		let data = this.props.data

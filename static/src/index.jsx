@@ -44,9 +44,25 @@ export default class App extends React.Component {
     })
   }
 
+  submit(a, b) {
+    $.ajax({
+      url: `/resolve_incident`,
+      type: 'POST',
+      dataType: 'json',
+      data: {
+        incident_id: a,
+        issue: b
+      },
+      success: data => {},
+      error: err => {
+        console.error(err)
+      }
+    })
+  }
+
   componentDidMount() {
-    // this.interval = setInterval(this.poll, 1000)
-    this.poll()
+    this.interval = setInterval(this.poll, 1000)
+    // this.poll()
   }
 
   componentWillUnmountMount() {
@@ -66,7 +82,10 @@ export default class App extends React.Component {
           changeScreen={this.changeScreen.bind(this)}
         />
         {this.state.screen === 'incident' ? (
-          <IncidentTable data={this.state.incidents} />
+          <IncidentTable
+            data={this.state.incidents}
+            submit={this.submit.bind(this)}
+          />
         ) : (
           <DriverTable data={this.state.users} />
         )}

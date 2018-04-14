@@ -46,13 +46,19 @@ def create_incident():
 
 @app.route('/resolve_incident', methods=['GET', 'POST'])
 def resolve_incident():
-    data = request.get_json()
+    print request.data
+    try:
+        data = request.get_json()
+    except Exception as e:
+        print e
+        raise
+    print 'data is %s' % data
     if not data:
         data = {
             'incident_id': '1234',
             'issue': 'super happy %s' % str(uuid.uuid4())
         }
-
+    print data
     incident_id = data['incident_id']
     issue = data['issue']
 

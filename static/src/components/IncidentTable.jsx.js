@@ -52,7 +52,11 @@ export default class IncidentTable extends React.Component {
 
 						<Table.Body>
 							{this.props.data.map(row => (
-								<Incident data={row} id={row.incident_id} />
+								<Incident
+									data={row}
+									id={row.incident_id}
+									submit={this.props.submit}
+								/>
 							))}
 						</Table.Body>
 					</Table>
