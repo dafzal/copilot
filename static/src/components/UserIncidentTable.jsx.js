@@ -1,5 +1,5 @@
 import React from 'react'
-import UserIncident from './Incident.jsx'
+import UserIncident from './UserIncident.jsx'
 import { Segment, Header, Table } from 'semantic-ui-react'
 import $ from 'jquery'
 
@@ -59,20 +59,18 @@ export default class UserIncidentTable extends React.Component {
 						<Table.Row>
 							<Table.HeaderCell>Time</Table.HeaderCell>
 							<Table.HeaderCell>Incident ID</Table.HeaderCell>
+							<Table.HeaderCell>Status</Table.HeaderCell>
 							<Table.HeaderCell>More</Table.HeaderCell>
 						</Table.Row>
 					</Table.Header>
 
-					<Table.Body />
+					<Table.Body>
+						{this.state.incidents.map(inc => (
+							<UserIncident data={inc} id={inc.incident_id} />
+						))}
+					</Table.Body>
 				</Table>
 			</div>
 		)
 	}
 }
-/*	{this.props.data.map(row => (
-							<Incident
-								data={row}
-								id={row.incident_id}
-								submit={this.props.submit}
-							/>
-						))}*/
