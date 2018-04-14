@@ -24,8 +24,11 @@ export default class Incident extends React.Component {
 		super(props)
 		this.input = this.input.bind(this)
 		this.submit = this.submit.bind(this)
+		this.handleClose = this.handleClose.bind(this)
+		this.onOpen = this.onOpen.bind(this)
 		this.state = {
-			issue: ''
+			issue: '',
+			modalOpen: false
 		}
 	}
 	input(e, d) {
@@ -34,6 +37,13 @@ export default class Incident extends React.Component {
 	submit() {
 		//ajax call to api to send status
 		this.props.submit(this.props.data.incident_id, this.state.issue)
+		this.setState({ modalOpen: false })
+	}
+	handleClose() {
+		this.setState({ modalOpen: false })
+	}
+	onOpen() {
+		this.setState({ modalOpen: true })
 	}
 	render() {
 		let data = this.props.data
@@ -65,8 +75,11 @@ export default class Incident extends React.Component {
 				<Table.Cell>{data.issue ? data.issue : ''}</Table.Cell>
 				<Table.Cell>
 					<Modal
+						open={this.state.modalOpen}
+						onClose={this.handleClose}
 						trigger={
 							<Button
+								onClick={this.onOpen}
 								basic
 								color={data.reviewed_at ? 'green' : 'red'}
 							>
@@ -82,6 +95,7 @@ export default class Incident extends React.Component {
 						</Modal.Content>
 						<Modal.Actions>
 							<Modal
+								onClose={this.handleClose}
 								trigger={
 									<Button
 										basic

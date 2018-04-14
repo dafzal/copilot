@@ -14,8 +14,7 @@ const Styles = {
 		fontWeight: 'bold'
 	},
 	table: {
-		position: 'relative',
-		left: 40
+		position: 'relative'
 	}
 }
 

@@ -48,12 +48,15 @@ export default class App extends React.Component {
     $.ajax({
       url: `/resolve_incident`,
       type: 'POST',
+      contentType: 'application/json',
       dataType: 'json',
-      data: {
+      data: JSON.stringify({
         incident_id: a,
         issue: b
+      }),
+      success: data => {
+        this.render()
       },
-      success: data => {},
       error: err => {
         console.error(err)
       }
