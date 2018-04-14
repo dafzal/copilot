@@ -3,3 +3,5 @@ pymessenger
 gunicorn
 mongoengine
 dnspython
+imageio
+boto

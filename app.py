@@ -6,10 +6,15 @@ import json
 from mongoengine import connect
 import time
 import uuid
+import imageio
+import gevent
+import boto
 
 app = Flask(__name__)
 url = 'tolipoc/63536:moc.balm.635360sd@nadnad:nad//:bdognom'[::-1]
 connect(host=url)
+conn = boto.connect_s3(anon=True)
+bucket = conn.get_bucket('copilot-incident-images', validate=False)
 
 @app.route("/", methods=['GET', 'POST'])
 def index():
@@ -22,13 +27,37 @@ def create_incident():
         data = {
             'incident_id': str(uuid.uuid4()),
             'user_id': 1,
-            'images': ['img1', 'img2'],
+            'images': ['https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/27908303_10112794674970611_8556241720083400749_o.jpg?_nc_cat=0&oh=40d3ee2a5463f952ec21683ccc80bf25&oe=5B5A4034',
+                       'https://s3-us-west-1.amazonaws.com/copilot-incident-images/1_1523727678902.jpg',
+                       'https://scontent-sjc3-1.xx.fbcdn.net/v/t31.0-8/20247743_10111537135804181_3181030631316154852_o.jpg?_nc_cat=0&oh=0d45848e8f2972545593881487840cb7&oe=5B62C3FC',
+                       'https://s3-us-west-1.amazonaws.com/copilot-incident-images/1_1523727678902.jpg',
+                       ],
         }
+
+
     incident_id = data.get('incident_id')
     try:
         Incident.objects.get(incident_id).delete()
     except:
         pass
+
+    # create gif
+    print 'pulling images'
+    greenlets = []
+    for url in data['images']:
+        greenlets.append(gevent.spawn(imageio.imread, url))
+    gevent.joinall(greenlets)
+    print 'done pulling images'
+
+    gif_name = '%s.gif' % incident_id
+    local_name = '/tmp/%s' % gif_name
+    imageio.mimsave(local_name, [x.value for x in greenlets])
+    print 'done saving gif'
+
+    key = boto.s3.key.Key(bucket)
+    key.key = gif_name
+    key.set_contents_from_filename(local_name)
+    print 'done uploading gif'
 
     user_id = data.get('user_id')
     user = User.objects.get(user_id=user_id)
@@ -40,8 +69,11 @@ def create_incident():
     incident.incident_id = incident_id
     incident.issue = issue
     incident.user = user
-    incident.images = data['images']
+    incident.images = [key.generate_url(expires_in=0, query_auth=False)]
     incident.save()
+
+    user.incidents.append(incident)
+    user.save()
     return jsonify(incident.to_json())
 
 @app.route('/resolve_incident', methods=['GET', 'POST'])
