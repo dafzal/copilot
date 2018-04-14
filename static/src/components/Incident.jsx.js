@@ -12,7 +12,6 @@ import $ from 'jquery'
 
 const Styles = {
 	truncate: {
-		width: 200,
 		whiteSpace: 'nowrap',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis'

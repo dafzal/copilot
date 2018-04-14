@@ -14,7 +14,10 @@ const Styles = {
 		fontWeight: 'bold'
 	},
 	table: {
-		position: 'relative'
+		// position: 'relative'
+		float: 'none',
+		margin: 0
+		// auto
 	}
 }
 
@@ -30,14 +33,7 @@ export default class IncidentTable extends React.Component {
 					<span style={Styles.date}> Incidents </span>
 				</div>
 				<div style={Styles.table}>
-					<Table
-						basic="very"
-						collapsing
-						singleLine
-						selectable
-						fixed
-						textAlign="left"
-					>
+					<Table singleLine selectable textAlign="left">
 						<Table.Header>
 							<Table.Row>
 								<Table.HeaderCell>Time</Table.HeaderCell>

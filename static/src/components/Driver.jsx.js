@@ -3,7 +3,6 @@ import { Card, Image, Table } from 'semantic-ui-react'
 
 const Styles = {
 	truncate: {
-		width: 200,
 		whiteSpace: 'nowrap',
 		overflow: 'hidden',
 		textOverflow: 'ellipsis'
