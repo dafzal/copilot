@@ -37,9 +37,7 @@ export default class DriverTable extends React.Component {
 								<Table.HeaderCell />
 								<Table.HeaderCell>Name</Table.HeaderCell>
 								<Table.HeaderCell>Driver ID</Table.HeaderCell>
-								<Table.HeaderCell>
-									Number of Incidents
-								</Table.HeaderCell>
+
 								<Table.HeaderCell>See More</Table.HeaderCell>
 							</Table.Row>
 						</Table.Header>

@@ -25,7 +25,6 @@ export default class Driver extends React.Component {
 				</Table.Cell>
 				<Table.Cell>{user.name}</Table.Cell>
 				<Table.Cell>{user.user_id}</Table.Cell>
-				<Table.Cell>number here</Table.Cell>
 				<Table.Cell>
 					<Modal trigger={<Button>Show Incident Log</Button>}>
 						<Modal.Header>

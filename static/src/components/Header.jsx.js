@@ -37,7 +37,7 @@ export default class HeadBanner extends React.Component {
 				<img className="banner" />
 				<div style={Styles.columns}>
 					<div onClick={this.screenClick} id="incident">
-						{this.props.incident} Incidents
+						{this.props.incident} New Events
 					</div>
 					<div onClick={this.screenClick} id="user">
 						{this.props.user} Users

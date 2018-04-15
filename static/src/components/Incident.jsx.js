@@ -123,14 +123,14 @@ export default class Incident extends React.Component {
 						</Modal.Content>
 						<Modal.Actions>
 							<Button onClick={this.removeIncident} value="issue">
-								This is a Problem
+								Escalate
 							</Button>
 							<Button
 								onClick={this.removeIncident}
 								value="notIssue"
 							>
 								{' '}
-								This is not a problem{' '}
+								Resolve{' '}
 							</Button>
 						</Modal.Actions>
 					</Modal>
