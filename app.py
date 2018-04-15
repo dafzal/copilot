@@ -88,7 +88,6 @@ def create_incident():
     incident.issue = issue
     incident.user = user
     incident.images = [key.generate_url(expires_in=0, query_auth=False)]
-    incident.scores = user.scores[-200:]
     incident.save()
 
     user.incidents.append(incident)
@@ -214,8 +213,6 @@ def ulu():
     # user.points.append(point)
     # user.save()
 
-    user.scores.extend([hp.score for hp in point.head_positions])
-    user.scores = user.scores[:500]
     user.save()
 
     x =  jsonify(
